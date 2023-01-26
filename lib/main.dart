@@ -38,6 +38,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static const String _organizationId = "tZFvfVActG";
+  //static const String _sessionId = "233c8675-e227-4198-b4ca-15e3590876ff";
 
   /// To always get the same "crossApplicationUniqueId"
   /// with this example, just pass a fixed instalationDate
