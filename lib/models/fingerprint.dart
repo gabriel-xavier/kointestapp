@@ -13,7 +13,7 @@ class Fingerprint extends DataEquality {
 
   Fingerprint({
     required String organizationId,
-    String? sessionId, 
+    String? sessionId,
     required MobileApplication mobileApplication,
   }) : this._(
           organizationId: organizationId,
