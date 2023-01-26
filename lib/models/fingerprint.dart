@@ -5,11 +5,22 @@ class Fingerprint extends DataEquality {
   final String sessionId;
   final MobileApplication mobileApplication;
 
-  const Fingerprint({
+  const Fingerprint._({
     required this.organizationId,
     required this.sessionId,
     required this.mobileApplication,
   });
+
+  Fingerprint({
+    required String organizationId,
+    String? sessionId,
+    required MobileApplication mobileApplication,
+  }) : this._(
+          organizationId: organizationId,
+          sessionId: sessionId ??
+              "${"${DateTime.now().hashCode}${organizationId.hashCode}".hashCode}-${"${DateTime.now().hashCode}${mobileApplication.hashCode}".hashCode}",
+          mobileApplication: mobileApplication,
+        );
 
   factory Fingerprint.from(Fingerprint fingerprint) {
     return Fingerprint(
@@ -60,6 +71,7 @@ class Fingerprint extends DataEquality {
 }
 
 class MobileApplication extends DataEquality {
+  final String deviceUniqueId;
   final String crossApplicationUniqueId;
   final Application application;
   final OperativeSystem operativeSystem;
@@ -71,6 +83,7 @@ class MobileApplication extends DataEquality {
   final String isp;
 
   const MobileApplication._({
+    required this.deviceUniqueId,
     required this.crossApplicationUniqueId,
     required this.application,
     required this.operativeSystem,
@@ -83,6 +96,7 @@ class MobileApplication extends DataEquality {
   });
 
   MobileApplication({
+    required String deviceUniqueId,
     required Application application,
     required OperativeSystem operativeSystem,
     required Device device,
@@ -92,8 +106,9 @@ class MobileApplication extends DataEquality {
     required String networkType,
     required String isp,
   }) : this._(
+          deviceUniqueId: deviceUniqueId,
           crossApplicationUniqueId:
-              "${"${application.hashCode}${operativeSystem.hashCode}".hashCode}.${"${application.hashCode}${device.hashCode}".hashCode}.${"${application.hashCode}${screen.hashCode}".hashCode}.${"${application.hashCode}${hardware.hashCode}".hashCode}.${"${application.hashCode}${connectivity.hashCode}".hashCode}",
+              "${deviceUniqueId.hashCode}-${"${deviceUniqueId.hashCode}${operativeSystem.hashCode}".hashCode}-${"${deviceUniqueId.hashCode}${screen.hashCode}".hashCode}",
           application: application,
           operativeSystem: operativeSystem,
           device: device,
@@ -106,6 +121,7 @@ class MobileApplication extends DataEquality {
 
   factory MobileApplication.from(MobileApplication mobileApplication) {
     return MobileApplication(
+      deviceUniqueId: mobileApplication.deviceUniqueId,
       application: Application.from(mobileApplication.application),
       operativeSystem: OperativeSystem.from(mobileApplication.operativeSystem),
       device: Device.from(mobileApplication.device),
@@ -118,6 +134,7 @@ class MobileApplication extends DataEquality {
   }
 
   factory MobileApplication.fromMap(Map<String, dynamic> data) {
+    final String deviceUniqueId = data['deviceUniqueId'] ?? "";
     final Map<String, dynamic> applicationData = Map<String, dynamic>.from(
       data['application'] ?? {},
     );
@@ -140,6 +157,7 @@ class MobileApplication extends DataEquality {
     final String isp = data['isp'] ?? "";
 
     return MobileApplication(
+      deviceUniqueId: deviceUniqueId,
       application: Application.fromMap(applicationData),
       operativeSystem: OperativeSystem.fromMap(operativeSystemData),
       device: Device.fromMap(deviceData),
@@ -155,6 +173,7 @@ class MobileApplication extends DataEquality {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
+    data['deviceUniqueId'] = deviceUniqueId;
     data['crossApplicationUniqueId'] = crossApplicationUniqueId;
     data['application'] = application.toMap();
     data['operativeSystem'] = operativeSystem.toMap();
@@ -170,6 +189,7 @@ class MobileApplication extends DataEquality {
 
   @override
   MobileApplication copyWith({
+    String? deviceUniqueId,
     String? crossApplicationUniqueId,
     Application? application,
     OperativeSystem? operativeSystem,
@@ -181,6 +201,7 @@ class MobileApplication extends DataEquality {
     String? isp,
   }) {
     return MobileApplication(
+      deviceUniqueId: deviceUniqueId ?? this.deviceUniqueId,
       application: application ?? this.application,
       operativeSystem: operativeSystem ?? this.operativeSystem,
       device: device ?? this.device,

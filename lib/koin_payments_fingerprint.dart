@@ -6,12 +6,10 @@ abstract class KoinPaymentsFingerprint {
   static const String sandboxUrl =
       "https://api-sandbox.koin.com.br/fingerprint/session/mobile";
 
-  static const String productionUrl = ""; // TODO:
-
   /// Returns device fingerprint
   static Fingerprint fingerprint({
     required String organizationId,
-    required String sessionId,
+    String? sessionId,
     required MobileApplication mobileApplication,
   }) =>
       Fingerprint(
